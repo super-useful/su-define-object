@@ -20,11 +20,11 @@ node v0.11.12
 
 ## Usage
 
+create an nested object constructor
+
 ```
 var define = require('su-define-object');
 
-
-//  create an nested object constructor
 
 var Tree = define('Tree', {
 
@@ -74,10 +74,11 @@ var Tree = define('Tree', {
   }
 
 })
+```
 
+instantiate a nested instance
 
-//  instantiate a nested instance
-
+```
 var oak = new Tree({
   species: "Oak",
   trunk: {
@@ -99,8 +100,10 @@ var oak = new Tree({
 oak.branches[2].leaves // => 30
 oak instanceof Oak // => true
 
-//  instantiate an instance with no relations
+```
+instantiate an instance with no relations
 
+```
 var birch = new Tree({
   species: "Silver birch",
   trunk: {
@@ -110,10 +113,11 @@ var birch = new Tree({
 
 birch.trunk.diameter // => 5
 birch.branches[2].leaves // => undefined
+```
 
+setting a property of an existing instance to an incorrect type will throw
 
-//  setting a property of an existing instance to an incorrect type will throw
-
+```
 try {
 
   birch.trunk.diameter = "ten";
@@ -122,11 +126,11 @@ catch (e) {
 
   e instanceof TypeError // => true
 }
+```
 
+instantiating an instance with incorrect types will throw an array of *all* the errors that occured during instantiation
 
-//  instantiating an instance with incorrect types will throw an array
-//  of *all* the errors that occured during instantiation
-
+```
 try {
 
   var elm = new Tree({
@@ -144,10 +148,11 @@ catch (e) {
   e[0] instanceof TypeError // => true
   e[1] instanceof TypeError // => true
 }
+```
 
+custom setters (ES5) can be passed in the property descriptor
 
-//  custom setters (ES5) can be passed in the property descriptor
-
+```
 var Cactus = define('Cactus', {
   properties: [
     {
@@ -171,6 +176,5 @@ cactus.spikes // => 10;
 
 cactus.spikes = "rainy";
 cactus.spikes // => 100;
-
 
 ```
