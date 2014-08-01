@@ -77,6 +77,30 @@ function updateHasOne (object, data, e) {
 
 
 /**
+  @description  create hasMany child entities
+  @param        {Object} model
+  @param        {Object} hasOne
+*/
+function updateHasMany (object, data, e) {
+
+  if (object.hasMany) {
+
+    forEach(object.hasMany, function(Relation, name) {
+
+      if (data.hasOwnProperty(name)) {
+
+        forEach(data[name], function (data) {
+
+          object[name].push(new Relation(data, e));
+        });
+      }
+    });
+  }
+}
+
+
+
+/**
   @description  generic setter - binds to internal __data__ structure
   @param        {String} prop
   @param        {Function} set
@@ -85,11 +109,12 @@ function updateHasOne (object, data, e) {
 */
 function set (prop, set, type, value) {
 
+  var data = set.call(this, value);
+
   if (type) {
-    enforce(type, value);
+    enforce(type, data);
   }
 
-  var data = set.call(this, value);
   this.__data__[prop] = data;
 
   this.emit(prop, {
@@ -111,6 +136,19 @@ function setRelation (Relation, value) {
 }
 
 
+/**
+  @description  collection setter
+  @param        {String} prop
+*/
+function setCollection (prop) {
+
+  if (this.__data__[prop]) {
+    throw new ReferenceError();
+  }
+
+  this.__data__[prop] = [];
+
+}
 
 /**
   @description  generic getter - binds to internal __data__ structure
@@ -177,6 +215,27 @@ module.exports = function define (name, definition) {
     });
   }
 
+  //  set up has many relationships
+  if (definition.hasMany) {
+
+    def.hasMany = {
+      value: {}
+    };
+
+    forEach(definition.hasMany, function (Relation, prop) {
+
+      def.hasMany.value[prop] = Relation;
+
+      def[prop] = {
+        set: lateBind(setCollection, prop),
+        get: lateBind(get, prop),
+        defaultValue: true
+      }
+
+    });
+  }
+
+
   if (definition.properties) {
 
     //  late bind the generic getters and setters
@@ -242,7 +301,7 @@ module.exports = function define (name, definition) {
 
     updateProperties(this, data, e);
     updateHasOne(this, data, e);
-    // updateHasMany(this, data, e);
+    updateHasMany(this, data, e);
 
     if (throwErrors && e.length > 0) {
       throw e;

@@ -48,6 +48,9 @@ describe(modulePath, function() {
         onInit: Relation,
         afterInit: Relation
       },
+      hasMany: {
+        lots: Relation
+      },
       properties: [
         {
           theProperty: {
@@ -82,7 +85,12 @@ describe(modulePath, function() {
       setTest: 1,
       theProperty: 'simon',
       anotherProperty: 'sarah',
-      onInit: {childName: 'Matilda'}
+      onInit: {childName: 'Matilda'},
+      lots: [
+        {childName: "Mum"},
+        {childName: "Dad"},
+        {childName: "Grandma"}
+      ]
     });
 
   });
@@ -174,15 +182,31 @@ describe(modulePath, function() {
 
     });
 
-    it("should create a related object which is an instanceof Relation", function() {
+    it("should create a hasOne related object which is an instanceof Relation", function() {
 
       expect(model.onInit).to.be.an.instanceof(Relation);
 
     });
 
-    it("should set the properties on the related object", function() {
+    it("should set the properties on the hasOne related object", function() {
 
       expect(model.onInit.childName).to.be.equal('Matilda');
+
+    });
+
+    it("should create hasMany related objects which are an instanceof Relation", function() {
+
+      expect(model.lots[0]).to.be.an.instanceof(Relation);
+      expect(model.lots[1]).to.be.an.instanceof(Relation);
+      expect(model.lots[2]).to.be.an.instanceof(Relation);
+
+    });
+
+    it("should set the properties on the hasMany related objects", function() {
+
+      expect(model.lots[0].childName).to.be.equal('Mum');
+      expect(model.lots[1].childName).to.be.equal('Dad');
+      expect(model.lots[2].childName).to.be.equal('Grandma');
 
     });
 
@@ -247,7 +271,7 @@ describe(modulePath, function() {
   });
 
 
-  describe('relation setters', function () {
+  describe('hasOne relation setters', function () {
 
     it('should instantiate a new relation object from raw data', function () {
 
@@ -263,6 +287,31 @@ describe(modulePath, function() {
       model.afterInit = relation;
 
       expect(model.afterInit).to.be.equal(relation);
+
+    });
+
+  });
+
+
+  describe('hasMany relation setters', function () {
+
+    it('should throw a ReferenceError if the setter is overwritten', function () {
+
+      var e;
+      try {
+        model.lots = [{childName: 'Jefforson'}];
+      }
+      catch (err) {
+        e = err;
+      }
+
+      expect(e).to.be.instanceof(ReferenceError);
+
+    });
+
+    it('should return the collection from the getter', function () {
+
+      expect(model.lots.length).to.be.equal(3);
 
     });
 
