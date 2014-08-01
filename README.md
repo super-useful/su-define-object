@@ -1,8 +1,11 @@
 # su-define-object
 
 Build trees of ES5 property objects with hasOne/hasMany relationships.
+
 Properties can have basic types: string|number|boolean etc.
+
 Properties can have custom setters.
+
 Objects extend EventEmitter.
 
 
@@ -93,8 +96,8 @@ var oak = new Tree({
 });
 
 
-oak.branches[2].leaves // -> 30
-
+oak.branches[2].leaves // => 30
+oak instanceof Oak // => true
 
 //  instantiate an instance with no relations
 
@@ -105,8 +108,20 @@ var birch = new Tree({
   }
 });
 
+birch.trunk.diameter // => 5
+birch.branches[2].leaves // => undefined
 
-birch.branches[2].leaves // -> undefined
+
+//  setting a property of an existing instance to an incorrect type will throw
+
+try {
+
+  birch.trunk.diameter = "ten";
+}
+catch (e) {
+
+  e instanceof TypeError // => true
+}
 
 
 //  instantiating an instance with incorrect types will throw an array
@@ -130,6 +145,32 @@ catch (e) {
   e[1] instanceof TypeError // => true
 }
 
+
+//  custom setters (ES5) can be passed in the property descriptor
+
+var Cactus = define('Cactus', {
+  properties: [
+    {
+      spikes: {
+        enumerable: true,
+        set: function (val) {
+          if (val === 'rainy') {
+            return 100;
+          }
+          return 10;
+        }
+      }
+    }
+  ]
+})
+
+var cactus = new Cactus();
+
+cactus.spikes = "dry";
+cactus.spikes // => 10;
+
+cactus.spikes = "rainy";
+cactus.spikes // => 100;
 
 
 ```
