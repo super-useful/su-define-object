@@ -17,7 +17,7 @@ node v0.11.12
 
 ## Usage
 
-`
+```
 var define = require('su-define-object');
 
 
@@ -69,5 +69,4 @@ var Tree = define('Tree', {
   }
 
 })
-
-`
+```
