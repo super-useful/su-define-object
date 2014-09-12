@@ -4,7 +4,7 @@
   "description": "ES5 Object definition",
   "dependencies": {
     "super-is": "x",
-    "super-iter": "x",
+    "super-iter": "git+ssh://git@github.com:ibrokethat/iter.git#v0.1.0",
     "super-func": "x",
     "node-uuid": "x"
   },
