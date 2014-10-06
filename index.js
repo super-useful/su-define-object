@@ -187,6 +187,22 @@ function serialise (object, recurse) {
 
     });
   }
+
+  if (recurse && object.hasMany) {
+
+    forEach(object.hasMany, function (relation, name) {
+
+      if (typeof object[name] !== 'undefined') {
+
+        serialised[name] = map(object[name], function (data) {
+          return serialise(data, recurse);
+        });
+      }
+
+    });
+  }
+
+
   return serialised;
 
 }
