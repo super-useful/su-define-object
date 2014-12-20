@@ -18,7 +18,7 @@ node v0.11.12
 `npm install -d`
 `npm test`
 
-## Usage
+## Usage
 
 create an nested object constructor
 
@@ -38,42 +38,52 @@ var Tree = define('Tree', {
   ],
 
   hasOne: {
-    trunk: define('Trunk', {
-      properties: [
-        {
-          diameter: {
-            enumerable: true,
-            type: 'number'
-          }
-        }
-      ]
-    }),
-    rootSystem: define('RootSystem', {
-      properties: [
-        {
-          systemType: {
-            enumerable: true,
-            type: 'string'
-          }
-        }
-      ]
-    });
+    trunk: Trunk,
+    rootSystem: RootSystem
   },
 
   hasMany: {
-    branches: define('Branch', {
-      properties: [
-        {
-          leaves: {
-            enumerable: true,
-            type: 'number'
-          }
-        }
-      ]
-    })
+    branches: Branch
   }
 
-})
+});
+
+
+var Trunk = define('Trunk', {
+  properties: [
+    {
+      diameter: {
+        enumerable: true,
+        type: 'number'
+      }
+    }
+  ]
+});
+
+
+var RootSystem = define('RootSystem', {
+  properties: [
+    {
+      systemType: {
+        enumerable: true,
+        type: 'string'
+      }
+    }
+  ]
+});
+
+
+var Branch = define('Branch', {
+  properties: [
+    {
+      leaves: {
+        enumerable: true,
+        type: 'number'
+      }
+    }
+  ]
+});
+
 ```
 
 instantiate a nested instance

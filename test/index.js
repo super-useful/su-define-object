@@ -345,7 +345,12 @@ describe(modulePath, function() {
         onInit: {
           childName: 'Matilda',
           typeTest: undefined
-        }
+        },
+        lots: [
+          {childName: "Mum", typeTest: undefined},
+          {childName: "Dad", typeTest: undefined},
+          {childName: "Grandma", typeTest: undefined}
+        ]
       };
 
       expect(serialised).to.deep.equal(match);
