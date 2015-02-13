@@ -292,10 +292,12 @@ module.exports = function define (name, definition) {
         value: Object.create(null)
       },
       _maxListeners: {
-        value: Object.create(null)
+        value: Object.create(null),
+        writable: true
       },
       domain: {
-        value: null
+        value: null,
+        writable: true
       }
     });
 
